@@ -1,57 +1,34 @@
-"use client";
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import CourseContentList from '@/components/CourseContentList';
+
 import styles from './page.module.css';
-import LoginGuard from '@/components/LoginGuard';
-import CourseCard from '@/components/CourseCard';
-import React from 'react';
+const CoursePage = ({ params }: { params: { id: string } }) => {
+    // Sample course data with content
+    const course = {
+        id: 'course-1',
+        title: 'Introduction to Web3',
+        instructor: 'Jane Doe',
+        thumbnail: '/path/to/course1-thumbnail.jpg',
+        description: 'Learn the basics of Web3 and its applications.',
+        content: [
+            { id: 'content-1', title: 'What is Web3?', thumbnail: '/assets/smart.jpg', videoUrl: 'https://video1.com', description: 'Introduction to Web3 concepts.' },
+            { id: 'content-2', title: 'Web3 vs. Traditional Internet', thumbnail: '/assets/web3.jpg', videoUrl: 'https://video2.com', description: 'Understanding the differences.' },
+        ],
+    };
 
-
-export default function CoursePage({ params }: { params: { id: string } }) {
-    // Example course data
-    const courses = [
-        {
-            id: 'course-1',
-            title: 'Introduction to Web3',
-            instructor: 'Jane Doe',
-            thumbnail: '/path/to/course1-thumbnail.jpg'
-        },
-        {
-            id: 'course-2',
-            title: 'Smart Contracts 101',
-            instructor: 'John Doe',
-            thumbnail: '/path/to/course2-thumbnail.jpg'
-        },
-        {
-            id: 'course-3',
-            title: 'Blockchain Development',
-            instructor: 'Alice Smith',
-            thumbnail: '/path/to/course3-thumbnail.jpg'
-        },
-    ];
-
-    const course = courses.find(course => course.id === params.id);
+    const hasAccess = true; // Mock access, set to true/false based on user's access rights
 
     return (
         <div className="flex flex-col h-screen justify-center mx-auto ">
-            <main className="mx-auto space-y-5">
-                <LoginGuard>
-                    <div className={styles.container}>
-                        <section className={styles.courses}>
-                            <h2>{course?.title}</h2>
-                            <div className={styles.courseGrid}>
-                                {course ? (
-                                    <div key={course.id} className={styles.courseCard}>
-                                        <CourseCard course={course} />
-                                    </div>
-                                ) : (
-                                    <p>Course not found</p>
-                                )}
-                            </div>
-                        </section>
+            <div className={styles.container}>
+                <section className={styles.courses}>
+                    <h2>Popular Courses</h2>
+                    <div className={styles.courseGrid}>
+                        <CourseContentList contentList={course.content} hasAccess={hasAccess} courseId={course.id} />
                     </div>
-                </LoginGuard>
-            </main>
+                </section>
+            </div>
         </div>
     );
-}
+};
+
+export default CoursePage;
