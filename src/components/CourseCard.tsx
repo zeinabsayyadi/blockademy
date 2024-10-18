@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styles from './CourseCard.module.css';
 
 interface Course {
@@ -15,7 +16,7 @@ const CourseCard = ({ course }: { course: Course }) => {
             <h3>{course.title}</h3>
             <p>{course.instructor}</p>
             {course.description && <p>{course.description}</p>}
-            <a href={`/courses/${course.id}`}>View Course</a>
+            <Link href={`/courses/${course.id}`}>View Course</Link>
         </div>
     );
 };

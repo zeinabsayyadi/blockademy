@@ -1,15 +1,12 @@
 "use client";
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import styles from './page.module.css';
-import LoginGuard from '@/components/LoginGuard';
+import Link from 'next/link';
 import CourseCard from '@/components/CourseCard';
-import React from 'react';
+import LoginGuard from '@/components/LoginGuard';
+import styles from './page.module.css';
 
-
-export default function CoursePage({ params }: { params: { id: string } }) {
-    // Example course data
-    const courses = [
+const MyCourses: React.FC = () => {
+    // Example enrolled courses data
+    const enrolledCourses = [
         {
             id: 'course-1',
             title: 'Introduction to Web3',
@@ -30,23 +27,19 @@ export default function CoursePage({ params }: { params: { id: string } }) {
         },
     ];
 
-    const course = courses.find(course => course.id === params.id);
-
     return (
         <div className="flex flex-col h-screen justify-center mx-auto ">
             <main className="mx-auto space-y-5">
                 <LoginGuard>
                     <div className={styles.container}>
                         <section className={styles.courses}>
-                            <h2>{course?.title}</h2>
+                            <h2>My Enrolled Courses</h2>
                             <div className={styles.courseGrid}>
-                                {course ? (
+                                {enrolledCourses.map(course => (
                                     <div key={course.id} className={styles.courseCard}>
                                         <CourseCard course={course} />
                                     </div>
-                                ) : (
-                                    <p>Course not found</p>
-                                )}
+                                ))}
                             </div>
                         </section>
                     </div>
@@ -54,4 +47,6 @@ export default function CoursePage({ params }: { params: { id: string } }) {
             </main>
         </div>
     );
-}
+};
+
+export default MyCourses;

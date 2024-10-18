@@ -10,25 +10,25 @@
   position: relative;
 }
 
-.navbar-logo {
+.navbarLogo {
   display: flex;
   align-items: center;
   text-decoration: none;
   color: inherit; /* Ensure color inheritance */
 }
 
-.navbar-brand {
+.navbarBrand {
   font-size: 1.5rem;
   font-weight: bold;
 }
 
-.navbar-links {
+.navbarLinks {
   display: flex;
   gap: 16px;
   position: relative;
 }
 
-.nav-link {
+.navLink {
   padding: 8px 16px;
   color: inherit;
   text-decoration: none;
@@ -36,16 +36,16 @@
   transition: background-color 0.2s;
 }
 
-.nav-link:hover {
+.navLink:hover {
   background-color: var(--button-secondary-hover);
 }
 
-.nav-link.active {
+.navLinkActive {
   font-weight: bold;
   color: var(--button-primary-hover);
 }
 
-.nav-indicator {
+.navIndicator {
   position: absolute;
   bottom: 0;
   height: 2px;
@@ -53,13 +53,13 @@
   transition: all 0.3s;
 }
 
-.navbar-user {
+.navbarUser {
   display: flex;
   align-items: center;
 }
 
-.login-button,
-.logout-button {
+.loginButton,
+.logoutButton {
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -69,7 +69,7 @@
   transition: background 0.2s;
 }
 
-.login-button:hover,
-.logout-button:hover {
+.loginButton:hover,
+.logoutButton:hover {
   background-color: var(--button-secondary-hover);
 }

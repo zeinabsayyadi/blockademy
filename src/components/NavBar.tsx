@@ -9,6 +9,7 @@ import { EOA } from './EOA';
 
 const activeLinkIndicatorWidthRatio = 0.7;
 
+
 export default function NavBar() {
   const pathname = usePathname();
   const { isConnected } = useUserStore();
@@ -31,7 +32,7 @@ export default function NavBar() {
   }, [pathname]);
 
   return (
-    <header className={styles.navbar}>
+    <div className={styles.navbar}>
       <div className={styles.navbarLogo}>
         <Link href="/" className={styles.navbarBrand}>Blockademy</Link>
       </div>
@@ -55,7 +56,6 @@ export default function NavBar() {
       <div className={styles.navbarUser}>
         {isConnected ? (
           <>
-            <EOA />
             <button
               type="button"
               className={styles.logoutButton}
@@ -70,6 +70,6 @@ export default function NavBar() {
           </button>
         )}
       </div>
-    </header>
+    </div>
   );
 }
