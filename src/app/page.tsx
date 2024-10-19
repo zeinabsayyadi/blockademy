@@ -1,95 +1,55 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import { useEffect, useState } from "react";
+import { ethers } from "ethers";
+import { JsonRpcProvider } from 'ethers';
+import CourseCard from "@/components/CourseCard";
+import LoginGuard from "@/components/LoginGuard";
+import styles from './page.module.css';
+import Courses from "./courses/page";
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from "@/contracts/abi";
 
-export default function Home() {
+// Smart contract details
+const Home: React.FC = () => {
+  const [courses, setCourses] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const provider = new JsonRpcProvider("https://arb-sepolia.g.alchemy.com/v2/JFPV6F9K30KIzQBcPP4snu0JMOmU6zR5");
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
+        // Fetch all course addresses
+        const courseAddresses = await contract.getAllCourses();
+
+        const fetchedCourses = [];
+        for (const courseAddress of courseAddresses) {
+          // Fetch the course data for each address
+          const [courseThumbnail, courseDescription, contentCount] = await contract.getCourse(courseAddress);
+          fetchedCourses.push({
+            id: courseAddress,
+            title: courseDescription,
+            thumbnail: courseThumbnail, // IPFS or any storage location for the course image
+            contentCount
+          });
+        }
+
+        setCourses(fetchedCourses);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
+    <div className="flex flex-col h-screen justify-center mx-auto ">
+      <main className="mx-auto space-y-5">
+        <LoginGuard>
+          <Courses courses={courses} />
+        </LoginGuard>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
-}
+};
+
+export default Home;
