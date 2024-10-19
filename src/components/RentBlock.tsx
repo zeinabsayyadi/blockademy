@@ -6,17 +6,22 @@ import { nrlcToRlc } from '@/utils/nrlcToRlc';
 import { readableSecondsToDays } from '@/utils/secondsToDays';
 import { Button } from './button';
 import { Alert } from './Alert';
+import { getWeb3mailClient } from '@/utils/externals/web3mailClient';
+import { useRouter } from 'next/navigation';
 
 
 export function RentBlock({
   protectedDataAddress,
   rentalParams,
+  courseAddress,
 }: {
   protectedDataAddress: string;
   rentalParams: { price: number; duration: number };
+  courseAddress: string;
 }) {
   const queryClient = useQueryClient();
   const { address: userAddress } = useUserStore();
+  const router = useRouter();
 
   const rentProtectedDataMutation = useMutation({
     mutationKey: ['rentProtectedData'],
@@ -29,6 +34,7 @@ export function RentBlock({
       });
     },
     onSuccess: () => {
+      console.log("success")
       queryClient.invalidateQueries({
         queryKey: ['activeRentals', userAddress],
       });
@@ -37,9 +43,44 @@ export function RentBlock({
         variant: 'success',
         title: 'You can now view this content!',
       });
+      sendEmailMutation.mutate({
+        message: 'You have rented a video course',
+        courseAddress: courseAddress,
+      });
     },
   });
 
+  const sendEmailMutation = useMutation({
+    mutationKey: ["sendEmail"],
+    mutationFn: async ({
+      message,
+      courseAddress,
+    }: {
+      message: string;
+      courseAddress: string;
+    }) => {
+      const { web3mail } = await getWeb3mailClient();
+      return web3mail.sendEmail({
+        senderName: "Blockchain Academy",
+        contentType: "text/plain",
+        emailSubject: "A user has bought your video",
+        emailContent: `You have new a new user on your video course ${protectedDataAddress}`,
+        protectedData: courseAddress!,
+        workerpoolAddressOrEns: "prod-v8-learn.main.pools.iexec.eth",
+      });
+    },
+    onSuccess: () => {
+      toast({
+        variant: 'success',
+        title: 'Email sent!',
+      });
+
+      router.push(`/courses/${courseAddress}/content/${protectedDataAddress}`);
+    },
+    onError: (err) => {
+      console.error(err);
+    },
+  });
   return (
     <>
       <div className="flex w-full items-start gap-2 md:gap-8">

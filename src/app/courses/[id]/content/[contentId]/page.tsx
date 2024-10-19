@@ -198,7 +198,7 @@ const ContentPage = ({ params }: { params: { id: string, contentId: string } }) 
                     {/* Show the RentBlock when the user does not have access */}
                     <button onClick={() => { console.log(protectedData), console.log(hasActiveSubscriptionToCollectionOwner), console.log(activeRental), console.log(hasAccessToContent) }}>log</button>
                     {protectedData?.isRentable && (
-                        <RentBlock protectedDataAddress={dataAddress} rentalParams={protectedData.rentalParams!} />
+                        <RentBlock protectedDataAddress={dataAddress} rentalParams={protectedData.rentalParams!} courseAddress={params.id} />
                     )}
                     {!protectedData?.isRentable && (
                         <div className="text-center mt-4">
