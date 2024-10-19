@@ -111,7 +111,7 @@ const CreateCourse: React.FC = () => {
                 </div>
 
                 <button type="submit" className={styles.submitButton}>
-                    Create Protected Data
+                    Create Protected Course
                 </button>
             </form>
         </div>
