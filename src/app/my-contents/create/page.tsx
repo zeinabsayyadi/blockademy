@@ -47,7 +47,6 @@ const CreateCourse: React.FC = () => {
                 ethAddress: '0x0000000000000000000000000000000000000000', // Authorize any user
             });
 
-            // Redirect to my-content/[courseId] page
             router.push(`/my-contents/${courseId}`);
         },
         onError: (error) => {

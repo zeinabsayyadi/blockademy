@@ -4,6 +4,10 @@ import { ethers } from 'ethers';
 import CourseContentList from '@/components/CourseContentList';
 import styles from './page.module.css';
 import { JsonRpcProvider } from 'ethers';
+import { useQueryClient } from '@tanstack/react-query';
+import { ProtectedData } from '@iexec/dataprotector';
+import { Button } from '@/components/button';
+import Link from 'next/link';
 
 // Replace with your smart contract's address and ABI
 const CONTRACT_ADDRESS = "0x03AccD75D3e6665703E70C0c01A35556e1b39EB6";
@@ -93,7 +97,7 @@ const CONTRACT_ABI = [
 
 // Hardcoded course data as fallback
 const hardcodedCourse = {
-    id: 'course-1',
+    id: '0xd2D5E6BcfD6Bf81df7a3449DBc3C4C440E8Fc5FF',
     title: 'Introduction to Web3',
     instructor: 'Jane Doe',
     thumbnail: '/assets/course.png',
@@ -110,7 +114,27 @@ const MyCoursePage = ({ params }: { params: { id: string } }) => {
     const [content, setContent] = useState(hardcodedCourse.content);
     const [loading, setLoading] = useState(true);
     const [hasAccess] = useState(true); // Assuming the user has access
+    const queryClient = useQueryClient();
 
+
+    const [protectedData, setProtectedData] = useState<ProtectedData>({
+        name: hardcodedCourse.title,
+        address: hardcodedCourse.id,
+        owner: '',
+        schema: {},
+        creationTimestamp: 0,
+    });
+    useEffect(() => {
+        const allProtectedData = queryClient.getQueryData<ProtectedData[]>([
+            'myProtectedData',
+        ]);
+        const cachedProtectedData = allProtectedData?.find(
+            (oneProtectedData) => oneProtectedData.address === params.id
+        );
+        if (cachedProtectedData) {
+            setProtectedData(cachedProtectedData);
+        }
+    }, []);
     // Fetch course and contents from the blockchain
     const fetchCourseData = async (courseAddress: string) => {
         try {
@@ -172,11 +196,10 @@ const MyCoursePage = ({ params }: { params: { id: string } }) => {
                 <p>Loading course data...</p>
             ) : (
                 <div className={styles.container}>
-                    <h1>Manage Course: {params.id}</h1>
+                    <h1>Manage Course: {protectedData.name}</h1>
 
                     {/* Course Thumbnail and Description */}
                     <div className={styles.courseInfo}>
-                        <h2>Course Thumbnail</h2>
                         <img src={thumbnail} alt="Course Thumbnail" className={styles.thumbnail} />
                         <form onSubmit={handleCourseUpdate} className={styles.form}>
                             <div className={styles.formGroup}>
@@ -205,53 +228,20 @@ const MyCoursePage = ({ params }: { params: { id: string } }) => {
                     </div>
 
                     {/* Add new content (video) */}
-                    <div className={styles.addContentSection}>
-                        <h2>Add New Content (Video)</h2>
-                        <form onSubmit={handleAddContent} className={styles.form}>
-                            <div className={styles.formGroup}>
-                                <label htmlFor="newContentTitle">Content Title</label>
-                                <input
-                                    type="text"
-                                    id="newContentTitle"
-                                    value=""
-                                    onChange={() => { }}
-                                    required
-                                />
-                            </div>
 
-                            <div className={styles.formGroup}>
-                                <label htmlFor="newContentThumbnail">Content Thumbnail URL</label>
-                                <input
-                                    type="text"
-                                    id="newContentThumbnail"
-                                    value=""
-                                    onChange={() => { }}
-                                    required
-                                />
-                            </div>
-
-                            <div className={styles.formGroup}>
-                                <label htmlFor="newContentDescription">Content Description</label>
-                                <textarea
-                                    id="newContentDescription"
-                                    value=""
-                                    onChange={() => { }}
-                                    required
-                                ></textarea>
-                            </div>
-
-                            <button type="submit" className={styles.submitButton}>Add Content</button>
-                        </form>
-                    </div>
 
                     {/* Display current content */}
                     <section className={styles.courses}>
                         <h2>Course Content</h2>
                         <CourseContentList contentList={content} hasAccess={hasAccess} courseId={params.id} />
                     </section>
+                    <Button>
+                        <Link href={`/my-contents/${params.id}/create`}>Add new Content</Link>
+                    </Button>
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 };
 

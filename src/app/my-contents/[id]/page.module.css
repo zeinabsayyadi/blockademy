@@ -1,3 +1,4 @@
+/* Base styles for the page layout */
 .page {
   --gray-rgb: 0, 0, 0;
   --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
@@ -6,13 +7,13 @@
   --button-primary-hover: #383838;
   --button-secondary-hover: #f2f2f2;
 
-  display: grid;
-  grid-template-rows: 20px 1fr 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-items: center;
-  min-height: 100svh;
-  padding: 80px;
-  gap: 64px;
+  min-height: 100vh;
+  padding: 40px;
+  gap: 40px;
   font-family: var(--font-geist-sans);
 }
 
@@ -27,183 +28,102 @@
   }
 }
 
-.main {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  grid-row-start: 2;
-}
-
-.main ol {
-  font-family: var(--font-geist-mono);
-  padding-left: 0;
-  margin: 0;
-  font-size: 14px;
-  line-height: 24px;
-  letter-spacing: -0.01em;
-  list-style-position: inside;
-}
-
-.main li:not(:last-of-type) {
-  margin-bottom: 8px;
-}
-
-.main code {
-  font-family: inherit;
-  background: var(--gray-alpha-100);
-  padding: 2px 4px;
-  border-radius: 4px;
-  font-weight: 600;
-}
-
-.ctas {
-  display: flex;
-  gap: 16px;
-}
-
-.ctas a {
-  appearance: none;
-  border-radius: 128px;
-  height: 48px;
-  padding: 0 20px;
-  border: none;
-  border: 1px solid transparent;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  line-height: 20px;
-  font-weight: 500;
-}
-
-a.primary {
-  background: var(--foreground);
-  color: var(--background);
-  gap: 8px;
-}
-
-a.secondary {
-  border-color: var(--gray-alpha-200);
-  min-width: 180px;
-}
-
-.footer {
-  grid-row-start: 3;
-  display: flex;
-  gap: 24px;
-}
-
-.footer a {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.footer img {
-  flex-shrink: 0;
-}
-
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
-
-  .footer a:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-}
-
-@media (max-width: 600px) {
-  .page {
-    padding: 32px;
-    padding-bottom: 80px;
-  }
-
-  .main {
-    align-items: center;
-  }
-
-  .main ol {
-    text-align: center;
-  }
-
-  .ctas {
-    flex-direction: column;
-  }
-
-  .ctas a {
-    font-size: 14px;
-    height: 40px;
-    padding: 0 16px;
-  }
-
-  a.secondary {
-    min-width: auto;
-  }
-
-  .footer {
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
-}
-
-.container {
+/* Section for course information */
+.courseInfo {
+  width: 100%;
+  max-width: 800px;
+  background-color: var(--gray-alpha-100);
   padding: 20px;
-  font-family: 'GeistVF', sans-serif;
-}
-
-.hero {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
-  margin-bottom: 40px;
 }
 
-.hero h1 {
-  font-size: 3rem;
+.courseInfo h2 {
+  font-size: 1.75rem;
   color: #333;
-}
-
-.hero p {
-  font-size: 1.25rem;
-  color: #666;
   margin-bottom: 20px;
 }
 
-.ctaButton {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #0070f3;
-  color: white;
-  border-radius: 5px;
-  text-decoration: none;
+.thumbnail {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 20px;
 }
 
-.ctaButton:hover {
+/* Form styles */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+}
+
+.formGroup label {
+  font-size: 1rem;
+  color: #333;
+}
+
+.formGroup input,
+.formGroup textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+
+.submitButton {
+  background-color: #0070f3;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 1rem;
+}
+
+.submitButton:hover {
   background-color: #005bb5;
 }
 
+/* Section to add new content */
+.addContentSection {
+  width: 100%;
+  max-width: 800px;
+  background-color: var(--gray-alpha-100);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.addContentSection h2 {
+  font-size: 1.75rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Course content grid */
 .courses {
-  margin-top: 40px;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .courses h2 {
   font-size: 2rem;
+  color: #333;
   margin-bottom: 20px;
 }
 
@@ -213,23 +133,62 @@ a.secondary {
   gap: 20px;
 }
 
-/* NavBar styles */
+.courseGrid .courseItem {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.courseGrid .courseItem img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.courseGrid .courseItem h3 {
+  font-size: 1.25rem;
+  margin-top: 15px;
+  color: #333;
+}
+
+.courseGrid .courseItem p {
+  color: #666;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.courseGrid .courseItem .watchButton {
+  margin-top: 15px;
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #0070f3;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.courseGrid .courseItem .watchButton:hover {
+  background-color: #005bb5;
+}
+
+/* Navbar styles */
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 64px;
-  padding: 0 16px; /* Adjust for your layout */
+  padding: 0 16px;
   background-color: var(--gray-alpha-200);
   color: var(--foreground);
-  position: relative;
 }
 
 .navbar-logo {
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: inherit; /* Ensure color inheritance */
+  color: inherit;
 }
 
 .navbar-brand {
@@ -240,7 +199,6 @@ a.secondary {
 .navbar-links {
   display: flex;
   gap: 16px;
-  position: relative;
 }
 
 .nav-link {
@@ -258,14 +216,6 @@ a.secondary {
 .nav-link.active {
   font-weight: bold;
   color: var(--button-primary-hover);
-}
-
-.nav-indicator {
-  position: absolute;
-  bottom: 0;
-  height: 2px;
-  background: var(--button-primary-hover);
-  transition: all 0.3s;
 }
 
 .navbar-user {
