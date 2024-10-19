@@ -16,8 +16,10 @@ export function cleanDataProtectorSDK() {
 
 export async function initDataProtectorSDK({
   connector,
+  useDefaultOptions = false,
 }: {
   connector?: Connector;
+  useDefaultOptions?: boolean;
 }) {
   const provider = (await connector?.getProvider()) as unknown as string | AbstractProvider | AbstractSigner<Provider | null> | Eip1193Provider | undefined;
 
@@ -36,10 +38,10 @@ export async function initDataProtectorSDK({
     iexecOptions,
   };
 
-  const dataProtectorParent = new IExecDataProtector(
-    provider,
-    dataProtectorOptions
-  );
+
+  const dataProtectorParent = useDefaultOptions
+    ? new IExecDataProtector(provider)
+    : new IExecDataProtector(provider, dataProtectorOptions);
 
   dataProtector = dataProtectorParent.core;
   dataProtectorSharing = dataProtectorParent.sharing;

@@ -14,16 +14,17 @@ import { Button } from '@/components/button';
 import { getCompletedTaskId, saveCompletedTaskId } from '@/components/localStorageContentMap';
 import { useUserStore } from '@/utils/user.store';
 import { ImageZoom } from '@/components/ImageZoom';
+import { Address } from '@/utils/types';
 
 const VITE_PROTECTED_DATA_DELIVERY_DAPP_ADDRESS = "0x1cb7D4F3FFa203F211e57357D759321C6CE49921";
 const VITE_WORKERPOOL_ADDRESS = "prod-v8-learn.main.pools.iexec.eth";
-const userAddress = "0x7c00dc7574605bb50ada16e75cc797ec7f17b7fe"
 
 const ContentPage = ({ params }: { params: { contentId: string } }) => {
     const [contentAsObjectURL, setContentAsObjectURL] = useState<string>('');
     const [isImageVisible, setImageVisible] = useState(false);
     const [statusMessages, setStatusMessages] = useState<Record<string, boolean>>({});
     const { content: cachedContent, addContentToCache } = useContentStore();
+    const { address: userAddress } = useUserStore();
     const { connector } = useUserStore();
     const router = useRouter();
     const dataAddress = params.contentId;
@@ -39,7 +40,7 @@ const ContentPage = ({ params }: { params: { contentId: string } }) => {
         mutationKey: ['consumeOrGetResult'],
         mutationFn: async () => {
             setStatusMessages({});
-            await initDataProtectorSDK({ connector });
+            await initDataProtectorSDK({ connector, useDefaultOptions: true });
             const { dataProtectorSharing } = await getDataProtectorClient();
             if (!dataProtectorSharing) {
                 console.log("shit")
@@ -83,7 +84,7 @@ const ContentPage = ({ params }: { params: { contentId: string } }) => {
             });
 
             saveCompletedTaskId({
-                walletId: userAddress,
+                walletId: userAddress as Address,
                 protectedDataAddress: dataAddress,
                 completedTaskId: taskId,
             });
@@ -114,7 +115,7 @@ const ContentPage = ({ params }: { params: { contentId: string } }) => {
         }
         if (status.title === 'CONSUME_TASK' && !status.isDone && status.payload?.taskId) {
             saveCompletedTaskId({
-                walletId: userAddress,
+                walletId: userAddress as Address,
                 protectedDataAddress: dataAddress,
                 completedTaskId: status.payload.taskId,
             });
