@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { JsonRpcProvider } from 'ethers';
-import CourseCard from "@/components/CourseCard";
 import LoginGuard from "@/components/LoginGuard";
 import styles from './page.module.css';
 import Courses from "./courses/page";
