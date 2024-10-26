@@ -17,9 +17,9 @@ export default function RootLayout({
     <WagmiConfig config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         <html lang="en">
-          <body className="dark:bg-gray-900 dark:text-white flex h-screen flex-col text-center">
+          <body className="h-screen flex flex-col text-center">
             <NavBar />
-            <div>{children}</div>
+            <main className="h-page bg-gray-900 m-0">{children}</main>
           </body>
         </html>
       </QueryClientProvider>
